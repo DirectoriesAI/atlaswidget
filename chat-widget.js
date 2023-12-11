@@ -64,7 +64,7 @@
           <button id="chat-submit" class="bg-gray-800 text-white rounded-md px-4 py-2 cursor-pointer">Send</button>
         </div>
         <div class="flex text-center text-xs pt-4">
-          <span class="flex-1">Prompted by <a href="https://twitter.com/anantrp" target="_blank" class="text-indigo-600">@anantrp</a></span>
+          <span class="flex-1">Built by <a href="https://twitter.com/directoriesai" target="_blank" class="text-indigo-600">@directoriesai</a></span>
         </div>
       </div>
     </div>
