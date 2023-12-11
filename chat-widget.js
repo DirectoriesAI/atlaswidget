@@ -7,7 +7,14 @@
   const title = options.title || 'Atlas AI Assistant';
   const mainColor = options.mainColor || '#1F2937'; // Default to Tailwind's gray-800
   const secondaryColor = options.secondaryColor || '#FFFFFF'; // Default to white
-  const logoUrl = options.logoUrl || 'atlas-logo.jpeg'; // Default to 'atlas-logo.jpeg'
+  // Available logo options with a custom option fallback
+  const logoOptions = {
+    'atlasBlack': 'atlas-logo.jpeg',
+    'atlasTransparent': 'atlaslogotransparent.png',
+    'atlasWhite': 'atlaslogowhite.png'
+  };
+  // Use a custom logo URL if provided, otherwise fallback to predefined options or default
+  const logoUrl = options.logoUrl && options.logoUrl !== 'custom' ? logoOptions[options.logoUrl] || 'atlaslogowhite.png' : options.customLogoUrl || 'atlaslogowhite.png';
   const initialMessage = options.initialMessage || 'Hello from Atlas';
 
   // Inject the CSS
@@ -150,26 +157,31 @@
     chatInput.value = '';
   
     // Reply to the user
-    fetch('https://run.directories.ai/api/atlas/chat', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${atlasApiKey}`
-      },
-      body: JSON.stringify({ message: message, assistantId: assistantId })
-    })
-    .then(response => response.json())
-    .then(data => {
-      if (data && data.reply) {
-        reply(data.reply);
-      }
-    })
-    .catch(error => {
-      console.error('Error during Atlas API call:', error);
+    if (typeof atlasApiKey === 'undefined' || typeof assistantId === 'undefined') {
+      console.error('Error: Atlas API key or assistant ID is not defined.');
       setTimeout(() => {
         reply('Please ensure you have included your Atlas API key and assistant id.');
-      }, 5000);
-    });
+      }, 1000);
+    } else {
+      fetch('https://run.directories.ai/api/atlas/chat', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${atlasApiKey}`
+        },
+        body: JSON.stringify({ message: message, assistantId: assistantId })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data && data.reply) {
+          reply(data.reply);
+        }
+      })
+      .catch(error => {
+        console.error('Error during Atlas API call:', error);
+        reply('There was an error processing your request. Please try again later.');
+      });
+    }
   }
   
   function reply(message) {
