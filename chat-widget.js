@@ -64,7 +64,7 @@
   // Create chat widget container
   const chatWidgetContainer = document.createElement('div');
   chatWidgetContainer.id = 'chat-widget-container';
-  document.body.appendChild(chatWidgetContainer);
+  document.body.appendChild(chatWidgetContainer); 
   
   // Inject the HTML
   chatWidgetContainer.innerHTML = `
