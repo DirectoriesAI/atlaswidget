@@ -9,12 +9,10 @@
   const secondaryColor = options.secondaryColor || '#FFFFFF'; // Default to white
   // Available logo options with a custom option fallback
   const logoOptions = {
-    'atlasBlack': 'atlas-logo.jpeg',
-    'atlasTransparent': 'atlaslogotransparent.png',
-    'atlasWhite': 'atlaslogowhite.png'
+    'atlasBlack': 'atlas-logo.jpeg'
   };
-  // Use a custom logo URL if provided, otherwise fallback to predefined options or default
-  const logoUrl = options.logoUrl && options.logoUrl !== 'custom' ? logoOptions[options.logoUrl] || 'atlaslogowhite.png' : options.customLogoUrl || 'atlaslogowhite.png';
+  // Use a custom logo URL if provided, otherwise fallback to 'atlasBlack'
+  const logoUrl = options.logoUrl && options.logoUrl !== 'custom' ? logoOptions[options.logoUrl] || 'atlas-logo.jpeg' : options.customLogoUrl || 'atlas-logo.jpeg';
   const initialMessage = options.initialMessage || 'Hello from Atlas';
 
   // Inject the CSS
@@ -139,7 +137,7 @@
     }
   }  
 
-  function onUserRequest(message) {
+  async function onUserRequest(message) {
     // Handle user request here
     console.log('User request:', message);
   
@@ -163,24 +161,23 @@
         reply('Please ensure you have included your Atlas API key and assistant id.');
       }, 1000);
     } else {
-      fetch('https://run.directories.ai/api/atlas/chat', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          'Authorization': `Bearer ${atlasApiKey}`
-        },
-        body: JSON.stringify({ message: message, assistantId: assistantId })
-      })
-      .then(response => response.json())
-      .then(data => {
+      try {
+        const response = await fetch('https://run.directories.ai/api/atlas/chat', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            'x-api-key': atlasApiKey
+          },
+          body: JSON.stringify({ prompt: message, assistant_id: assistantId, atlas_api_key: atlasApiKey })
+        });
+        const data = await response.json();
         if (data && data.reply) {
           reply(data.reply);
         }
-      })
-      .catch(error => {
+      } catch (error) {
         console.error('Error during Atlas API call:', error);
         reply('There was an error processing your request. Please try again later.');
-      });
+      }
     }
   }
   

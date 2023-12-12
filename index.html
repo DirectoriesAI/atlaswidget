@@ -5,12 +5,25 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atlas Web Chat Widget - by Directories.ai</title>
-    <script async src="./chat-widget.js"></script>
+    <script>
+        // Define the global options variable before including the chat-widget.js script
+        window.chatWidgetOptions = {
+          assistantId: 'your-assistant-id',
+          atlasApiKey: 'your-atlas-api-key',
+          title: 'Your Custom Chat Title',
+          mainColor: '#4A90E2', // Custom main color
+          secondaryColor: '#F4F4F4', // Custom secondary color
+          logoUrl: 'custom', // Use 'custom' to specify a custom logo
+          customLogoUrl: 'atlas-logo.jpeg', // Path to your custom logo
+          initialMessage: 'Welcome to our support!'
+        };
+      </script>
+    <script async src="atlas-ui.directories.ai/chat-widget.js"></script>
 </head>
 <body class="bg-gray-300">
     <div class="flex flex-col items-center p-8 justify-center w-5xl h-screen md:text-center md:w-3xl ">
         <div>
-            <h1 class="text-2xl font-bold leading-relaxed">Click the chat widget on the bottom right to test a demo version of Atlas. Build your own website Atlas at https://atlas.directories.ai</h1>
+            <h1 class="text-2xl font-bold leading-relaxed">Click the chat widget on the bottom right to test a demo version of Atlas. Build a user Atlas for your site at https://atlas.directories.ai</h1>
         </div>
 
     <div class="pt-8">
