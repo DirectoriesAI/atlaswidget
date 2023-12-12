@@ -19,7 +19,7 @@
   const style = document.createElement('style');
   style.innerHTML = `
   .hidden {
-    display: none;
+    display: none; 
   }
   #chat-widget-container {
     position: fixed;
