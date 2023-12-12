@@ -4,7 +4,7 @@
   // Use the assistantId, atlasApiKey, title, mainColor, and secondaryColor from the options
   const assistantId = options.assistantId;
   const atlasApiKey = options.atlasApiKey;
-  const title = options.title || 'Atlas AI Assistant';
+  const title = options.title || 'Atlas AI User Guide';
   const mainColor = options.mainColor || '#1F2937'; // Default to Tailwind's gray-800
   const secondaryColor = options.secondaryColor || '#FFFFFF'; // Default to white
   // Available logo options with a custom option fallback
