@@ -4,6 +4,7 @@
   // Use the assistantId, atlasApiKey, title, mainColor, and secondaryColor from the options
   const assistantId = options.assistantId;
   const atlasApiKey = options.atlasApiKey;
+  const prompt = options.prompt;
   const title = options.title || 'Atlas AI User Guide';
   const mainColor = options.mainColor || '#1F2937'; // Default to Tailwind's gray-800
   const secondaryColor = options.secondaryColor || '#FFFFFF'; // Default to white
@@ -13,7 +14,7 @@
   };
   // Use a custom logo URL if provided, otherwise fallback to 'atlasBlack'
   const logoUrl = options.logoUrl && options.logoUrl !== 'custom' ? logoOptions[options.logoUrl] || 'atlas-logo.jpeg' : options.customLogoUrl || 'atlas-logo.jpeg';
-  const initialMessage = options.initialMessage || 'Hello from Atlas';
+  const initialMessage = options.initialMessage || 'Hello from Atlas Intelligent User Guides. We look forward to serving your users!';
 
   // Inject the CSS
   const style = document.createElement('style');
@@ -87,7 +88,7 @@
           <button id="chat-submit" class="text-white rounded-md px-4 py-2 cursor-pointer">Send</button>
         </div>
         <div class="flex text-center text-xs pt-4">
-          <span class="flex-1">Built by <a href="https://twitter.com/aidirectories" target="_blank" class="text-indigo-600">@directoriesai</a></span>
+          <span class="flex-1">Built by <a href="https://twitter.com/aidirectories" target="_blank" class="text-indigo-600">@AIdirectories</a></span>
         </div>
       </div>
     </div>
