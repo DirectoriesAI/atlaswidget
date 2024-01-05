@@ -14,7 +14,7 @@
   };
   // Use a custom logo URL if provided, otherwise fallback to 'atlasBlack'
   const logoUrl = options.logoUrl && options.logoUrl !== 'custom' ? logoOptions[options.logoUrl] || 'atlas-logo.jpeg' : options.customLogoUrl || 'atlas-logo.jpeg';
-  const initialMessage = options.initialMessage || 'Hello from Atlas Intelligent User Guides. We look forward to serving your users!';
+  const initialMessage = options.initialMessage || 'Hello from your Atlas Intelligent User Guide. How may I assist your website visitors and community members?';
 
   // Inject the CSS
   const style = document.createElement('style');
@@ -55,6 +55,9 @@
   }
   #chat-bubble {
     background-color: ${secondaryColor};
+  }
+  #chat-input {
+    color: black-700;
   }
   `;
 
@@ -136,7 +139,7 @@
     if (!chatPopup.classList.contains('hidden')) {
       document.getElementById('chat-input').focus();
     }
-  }  
+  } 
 
   async function onUserRequest(message) {
     // Handle user request here
@@ -163,7 +166,7 @@
       }, 1000);
     } else {
       try {
-        const response = await fetch('https://run.directories.ai/api/atlas/chat', {
+        const response = await fetch('https://atlas.directories.ai/api/assistant/chat', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
@@ -187,7 +190,7 @@
     const replyElement = document.createElement('div');
     replyElement.className = 'flex mb-3';
     replyElement.innerHTML = `
-      <div class="bg-gray-200 text-black rounded-lg py-2 px-4 max-w-[70%]">
+      <div class="bg-gray-200 text-gray-300 rounded-lg py-2 px-4 max-w-[70%]">
         ${message}
       </div>
     `;
