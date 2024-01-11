@@ -57,12 +57,12 @@
     background-color: ${secondaryColor};
   }
   #chat-input {
-    color: black-700;
+    color: #000000; /* Changed from black-700 to #000000 for better visibility */
   }
   `;
-
+  
   document.head.appendChild(style);
-
+  
   // Create chat widget container
   const chatWidgetContainer = document.createElement('div');
   chatWidgetContainer.id = 'chat-widget-container';
@@ -190,7 +190,7 @@
     const replyElement = document.createElement('div');
     replyElement.className = 'flex mb-3';
     replyElement.innerHTML = `
-      <div class="bg-gray-200 text-gray-300 rounded-lg py-2 px-4 max-w-[70%]">
+      <div class="bg-gray-200 text-gray-800 rounded-lg py-2 px-4 max-w-[70%]"> <!-- Changed text color from text-gray-300 to text-gray-800 for better visibility -->
         ${message}
       </div>
     `;
