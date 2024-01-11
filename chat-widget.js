@@ -6,7 +6,7 @@
   const atlasApiKey = options.atlasApiKey;
   const prompt = options.prompt;
   const title = options.title || 'Atlas AI User Guide';
-  const mainColor = options.mainColor || '#1F2937'; // Default to Tailwind's gray-800
+  const mainColor = options.mainColor || '#1A1A1A'; // Default to grey-black
   const secondaryColor = options.secondaryColor || '#FFFFFF'; // Default to white
   // Available logo options with a custom option fallback
   const logoOptions = {
