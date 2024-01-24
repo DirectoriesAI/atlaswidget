@@ -1,9 +1,19 @@
-(function(options) {
-  document.head.insertAdjacentHTML('beforeend', '<link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.16/tailwind.min.css" rel="stylesheet">');
+(function(options) { 
+  // Load Tailwind CSS from CDN
 
-  // Use the assistantId, atlasApiKey, title, mainColor, and secondaryColor from the options
-  const assistantId = options.assistantId;
-  const atlasApiKey = options.atlasApiKey;
+  // Apply the CORS middleware
+  // Note: 'app' is not defined in this scope, ensure 'app' is properly initialized before using this middleware
+  // app.use(corsMiddleware);
+  
+  const tailwindCdnUrl = 'https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.2.16/tailwind.min.css';
+  const linkElement = document.createElement('link');
+  linkElement.setAttribute('href', tailwindCdnUrl);
+  linkElement.setAttribute('rel', 'stylesheet');
+  linkElement.setAttribute('data-atlas-api-key', options.atlasApiKey || 'Id2qJHwrVgqtu8AziFmv8XD42cqehid6');
+  linkElement.setAttribute('data-atlas-id', options.atlasId || '484b7909-b395-4700-a7b3-02347dbdffae');
+  document.head.appendChild(linkElement);
+
+  // Use the atlasId, atlasApiKey, title, mainColor, and secondaryColor from the options
   const prompt = options.prompt;
   const title = options.title || 'Atlas AI User Guide';
   const mainColor = options.mainColor || '#1A1A1A'; // Default to grey-black
@@ -105,6 +115,11 @@
   const chatBubble = document.getElementById('chat-bubble');
   const chatPopup = document.getElementById('chat-popup');
   const closePopup = document.getElementById('close-popup');
+  const atlasApiKey = document.querySelector('[data-atlas-api-key]').getAttribute('data-atlas-api-key');
+  const atlasId = document.querySelector('[data-atlas-id]').getAttribute('data-atlas-id');
+
+  // Ensure the widget is aware it's embedded and can communicate with the parent page
+  const isEmbedded = window.self !== window.top;
 
   chatSubmit.addEventListener('click', function() {
     
@@ -115,7 +130,7 @@
 
     chatInput.value = '';
 
-    onUserRequest(message);
+    onUserRequest(message, atlasApiKey, atlasId);
 
   });
 
@@ -141,7 +156,7 @@
     }
   } 
 
-  async function onUserRequest(message) {
+  async function onUserRequest(message, atlasApiKey, atlasId)  {
     // Handle user request here
     console.log('User request:', message);
   
@@ -157,45 +172,61 @@
     chatMessages.scrollTop = chatMessages.scrollHeight;
   
     chatInput.value = '';
-  
-    // Reply to the user
-    if (typeof atlasApiKey === 'undefined' || typeof assistantId === 'undefined') {
-      console.error('Error: Atlas API key or assistant ID is not defined.');
-      setTimeout(() => {
-        reply('Please ensure you have included your Atlas API key and assistant id.');
-      }, 1000);
-    } else {
-      try {
-        const response = await fetch('https://atlas.directories.ai/api/assistant/chat', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'x-api-key': atlasApiKey
-          },
-          body: JSON.stringify({ prompt: message, assistant_id: assistantId, atlas_api_key: atlasApiKey })
-        });
-        const data = await response.json();
-        if (data && data.reply) {
-          reply(data.reply);
-        }
-      } catch (error) {
-        console.error('Error during Atlas API call:', error);
-        reply('There was an error processing your request. Please try again later.');
-      }
+
+    // Check if atlasApiKey and atlasId are defined
+    if (!atlasApiKey || !atlasId) {
+      console.error('Error: Atlas API key or atlas ID is not defined.');
+      reply('Please ensure you have included your Atlas API key and atlas id.');
+      return; // Exit the function if the keys are not defined
     }
+    const url = 'https://atlas-py.vercel.app/api';
+    const headers = new Headers();
+    headers.set('atlas_api_key', atlasApiKey);
+    headers.set('Content-Type', 'application/json');// Added Access-Control-Allow-Origin for CORS
+    const data = {
+      atlas_id: atlasId,
+      prompt: message
+    };
+
+    // Adjust fetch call to handle CORS when embedded
+    const fetchOptions = {
+      method: 'POST',
+      headers: headers,
+      body: JSON.stringify(data),
+      mode: isEmbedded ? 'no-cors' : 'cors'
+      
+    };
+
+    fetch(url, fetchOptions)
+    .then(response => {
+      if (!response.ok) {
+        throw new Error(`HTTP error! status: ${response.status}`);
+      }
+      return response.json();
+    })
+    .then(data => {
+      if (data && data.reply) {
+        reply(data.reply);
+      } else {
+        throw new Error('No reply received from the API.');
+      }
+    })
+    .catch((error) => {
+      console.error('Error during Atlas API call:', error);
+      reply('There was an error processing your API request. Please try again later.');
+    });
   }
-  
+
   function reply(message) {
     const chatMessages = document.getElementById('chat-messages');
     const replyElement = document.createElement('div');
     replyElement.className = 'flex mb-3';
     replyElement.innerHTML = `
-      <div class="bg-gray-200 text-gray-800 rounded-lg py-2 px-4 max-w-[70%]"> <!-- Changed text color from text-gray-300 to text-gray-800 for better visibility -->
+      <div class="bg-gray-200 text-gray-800 rounded-lg py-2 px-4 max-w-[70%]">
         ${message}
       </div>
     `;
     chatMessages.appendChild(replyElement);
     chatMessages.scrollTop = chatMessages.scrollHeight;
   }
-  
-;
+

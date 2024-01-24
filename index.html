@@ -5,7 +5,16 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Atlas Web Chat Widget - by Directories.ai</title>
-    <script async src="./chat-widget.js"></script>
+    <script>
+        (function() {
+            var script = document.createElement('script');
+            script.src = "./chat-widget.js";
+            script.setAttribute('data-atlas-api-key', process.env.ATLAS_API_KEY);
+            script.setAttribute('data-atlas-id', process.env.ATLAS_ID);
+            script.async = true;
+            document.head.appendChild(script);
+        })();
+    </script>
 </head>
 <body class="bg-gray-300">
     <div class="flex flex-col items-center p-8 justify-center w-5xl h-screen md:text-center md:w-3xl ">
